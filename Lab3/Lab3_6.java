@@ -2,75 +2,112 @@ package Lab3;
 
 import java.util.Scanner;
 
-// คลาสจำลองบัญชีธนาคารที่ปลอดภัย
 class BankAccount {
 
-    // Attribute (Encapsulation)
     private double balance;
 
-    // Constructor
     public BankAccount(double initialBalance) {
-        if (initialBalance >= 0) {
-            this.balance = initialBalance;
-        } else {
+
+        setInitialBalance(initialBalance);
+    }
+
+    private void setInitialBalance(double value) {
+
+        if (value < 0) {
+
             this.balance = 0;
+        }
+        else {
+
+            this.balance = value;
         }
     }
 
-    // คืนค่ายอดเงินคงเหลือ
     public double getBalance() {
-        return balance;
+
+        return this.balance;
     }
 
-    // ฝากเงิน
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
+
+        boolean validAmount;
+        validAmount = amount > 0;
+
+        if (validAmount) {
+
+            addToBalance(amount);
             System.out.println("Deposit successful.");
-        } else {
+        }
+        else {
+
             System.out.println("Invalid deposit amount.");
         }
     }
 
-    // ถอนเงิน
+    private void addToBalance(double amount) {
+
+        this.balance = this.balance + amount;
+    }
+
     public void withdraw(double amount) {
+
         if (amount <= 0) {
+
             System.out.println("Invalid withdrawal amount.");
-        } else if (amount <= balance) {
-            balance -= amount;
-            System.out.println("Withdrawal successful.");
-        } else {
-            System.out.println("Insufficient funds.");
+            return;
         }
+
+        if (amount > this.balance) {
+
+            System.out.println("Insufficient funds.");
+            return;
+        }
+
+        subtractFromBalance(amount);
+        System.out.println("Withdrawal successful.");
+    }
+
+    private void subtractFromBalance(double amount) {
+
+        this.balance = this.balance - amount;
     }
 }
 
 public class Lab3_6 {
 
+    private static double readDouble(Scanner sc) {
+
+        double value;
+        value = sc.nextDouble();
+        return value;
+    }
+
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        Scanner scanner;
+        scanner = new Scanner(System.in);
 
-        // รับข้อมูลจากผู้ใช้
-        System.out.print("Enter initialBalance : ");
-        double initialBalance = sc.nextDouble();
-        System.out.print("Enter depositamount : ");
-        double depositAmount = sc.nextDouble();
-        System.out.print("Enter withdrawamount : ");
-        double withdrawAmount = sc.nextDouble();
+        double startBalance;
+        startBalance = readDouble(scanner);
 
-        // สร้างบัญชีธนาคาร
-        BankAccount account = new BankAccount(initialBalance);
+        double depositValue;
+        depositValue = readDouble(scanner);
 
-        // ฝากเงิน
-        account.deposit(depositAmount);
+        double withdrawValue;
+        withdrawValue = readDouble(scanner);
 
-        // ถอนเงิน
-        account.withdraw(withdrawAmount);
+        BankAccount myAccount;
+        myAccount = new BankAccount(startBalance);
 
-        // แสดงยอดเงินคงเหลือสุดท้าย
-        System.out.println("Final Balance: " + account.getBalance());
+        myAccount.deposit(depositValue);
 
-        sc.close();
+        myAccount.withdraw(withdrawValue);
+
+        double resultBalance;
+        resultBalance = myAccount.getBalance();
+
+        System.out.println("Final Balance: " + resultBalance);
+
+        scanner.close();
     }
 }
