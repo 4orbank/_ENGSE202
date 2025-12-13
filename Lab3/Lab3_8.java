@@ -8,114 +8,59 @@ class InventoryItem {
     private int stock;
 
     public InventoryItem(String productName, int initialStock) {
-
         this.productName = productName;
-        initializeStock(initialStock);
-    }
-
-    private void initializeStock(int value) {
-
-        if (value >= 0) {
-
-            stock = value;
-        }
-        else {
-
-            stock = 0;
-        }
+        this.stock = (initialStock >= 0) ? initialStock : 0;
     }
 
     public String getProductName() {
-
         return productName;
     }
 
     public int getStock() {
-
         return stock;
     }
 
     public void addStock(int amount) {
-
-        if (amount <= 0) {
-
+        if (amount > 0) {
+            stock += amount;
+            System.out.println("Stock added.");
+        } else {
             System.out.println("Invalid amount.");
-            return;
         }
-
-        increaseStock(amount);
-        System.out.println("Stock added.");
-    }
-
-    private void increaseStock(int amount) {
-
-        stock = stock + amount;
     }
 
     public void sellStock(int amount) {
-
         if (amount <= 0) {
-
             System.out.println("Invalid amount.");
-            return;
-        }
-
-        if (amount > stock) {
-
+        } else if (amount > stock) {
             System.out.println("Not enough stock.");
-            return;
+        } else {
+            stock -= amount;
+            System.out.println("Sale successful.");
         }
-
-        decreaseStock(amount);
-        System.out.println("Sale successful.");
-    }
-
-    private void decreaseStock(int amount) {
-
-        stock = stock - amount;
     }
 }
 
 public class Lab3_8 {
 
-    private static int readInt(Scanner sc) {
-
-        int value;
-        value = sc.nextInt();
-        return value;
-    }
-
     public static void main(String[] args) {
 
-        Scanner sc;
-        sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
-        String productName;
-        productName = sc.nextLine();
+        String productName = sc.nextLine();
+        int initialStock = sc.nextInt();
 
-        int initialStock;
-        initialStock = readInt(sc);
+        InventoryItem item = new InventoryItem(productName, initialStock);
 
-        InventoryItem item;
-        item = new InventoryItem(productName, initialStock);
-
-        int commandCount;
-        commandCount = readInt(sc);
+        int commandCount = sc.nextInt();
 
         for (int i = 0; i < commandCount; i++) {
-
-            String command;
-            command = sc.next();
-
-            int amount;
-            amount = readInt(sc);
+            String command = sc.next();
+            int amount = sc.nextInt();
 
             if (command.equals("ADD")) {
-
                 item.addStock(amount);
-            }
-            else if (command.equals("SELL")) {
-
+            } else if (command.equals("SELL")) {
                 item.sellStock(amount);
             }
         }
