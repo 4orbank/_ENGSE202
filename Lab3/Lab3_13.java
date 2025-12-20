@@ -2,12 +2,11 @@ package Lab3;
 
 import java.util.Scanner;
 
-class LicenseManager {
+class BaiAnuyard {
 
     private static int maxLicenses = 10;
     private static int usedLicenses = 0;
 
-    // ตั้งค่าโควต้าสูงสุด
     public static void setMax(int max) {
         if (max < 0) {
             System.out.println("Invalid max value.");
@@ -19,7 +18,6 @@ class LicenseManager {
         }
     }
 
-    // เบิก License
     public static boolean checkOut() {
         if (usedLicenses < maxLicenses) {
             usedLicenses++;
@@ -31,7 +29,6 @@ class LicenseManager {
         }
     }
 
-    // คืน License
     public static void checkIn() {
         if (usedLicenses > 0) {
             usedLicenses--;
@@ -41,7 +38,6 @@ class LicenseManager {
         }
     }
 
-    // แสดงสถานะ
     public static void displayStatus() {
         System.out.println("Used: " + usedLicenses);
         System.out.println("Available: " + (maxLicenses - usedLicenses));
@@ -49,37 +45,49 @@ class LicenseManager {
 }
 
 public class Lab3_13 {
-
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        Scanner khor_nai = new Scanner(System.in);
+        int jam_kham_sang = 0;
 
-        int n = sc.nextInt();
-        sc.nextLine(); // consume leftover newline
+        try {
+            jam_kham_sang = Integer.parseInt(khor_nai.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number input.");
+            khor_nai.close();
+            return;
+        }
 
-        for (int i = 0; i < n; i++) {
-            String command = sc.nextLine();
+        for (int i = 0; i < jam_kham_sang; i++) {
+            String kam_sang = khor_nai.nextLine().trim();
 
-            switch (command) {
-                case "SET":
-                    int max = Integer.parseInt(sc.nextLine());
-                    LicenseManager.setMax(max);
-                    break;
+            switch (kam_sang) {
+            case "SET":
+              try {
+                int max_mai = Integer.parseInt(khor_nai.nextLine().trim());
+                BaiAnuyard.setMax(max_mai);
+              } catch (NumberFormatException e) {
+                System.out.println("SET value is not a number, skipping.");
+              }
+              break;
 
-                case "CHECKOUT":
-                    LicenseManager.checkOut();
-                    break;
+            case "CHECKOUT":
+              BaiAnuyard.checkOut();
+              break;
 
-                case "CHECKIN":
-                    LicenseManager.checkIn();
-                    break;
+            case "CHECKIN":
+              BaiAnuyard.checkIn();
+              break;
 
-                case "STATUS":
-                    LicenseManager.displayStatus();
-                    break;
+            case "STATUS":
+              BaiAnuyard.displayStatus();
+              break;
+
+            default:
+              System.out.println("Unknown command, skipping.");
             }
         }
 
-        sc.close();
+        khor_nai.close();
     }
 }

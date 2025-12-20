@@ -2,70 +2,73 @@ package Lab3;
 
 import java.util.Scanner;
 
-// เปลี่ยนชื่อ class จาก User -> LabUser
-class LabUser {
+class Puchai {
 
-    private String username;
-    private int failedAttempts;
-    private boolean isLocked;
-    private static int maxAttempts = 3;
+    private String userName;
+    private int failedLogin;
+    private boolean locked;
+    private static int maxTry = 3;
 
-    public LabUser(String username) {
-        this.username = username;
-        this.failedAttempts = 0;
-        this.isLocked = false;
+    public Puchai(String name) {
+        this.userName = name;
+        this.failedLogin = 0;
+        this.locked = false;
     }
 
-    public void login(String password) {
-        if (isLocked) {
-            System.out.println("Account is locked.");
-            return;
-        }
-        if ("pass123".equals(password)) {
-            failedAttempts = 0;
-            System.out.println("Login successful.");
-        } else {
-            failedAttempts++;
-            if (failedAttempts >= maxAttempts) {
-                isLocked = true;
-                System.out.println("Login failed. Account locked.");
-            } else {
-                System.out.println("Login failed. " + (maxAttempts - failedAttempts) + " attempts left.");
-            }
-        }
-    }
+    public String getUserName() { return userName; }
+    public boolean isLocked() { return locked; }
+    public int getFailedLogin() { return failedLogin; }
 
     public static void setPolicy(int max) {
-        if (max > 0) {
-            maxAttempts = max;
+        if(max > 0) {
+            maxTry = max;
             System.out.println("Policy updated.");
         } else {
             System.out.println("Invalid policy.");
         }
     }
-}
 
-public class Lab3_1_5 { // ชื่อไฟล์ต้องตรง
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        String username = sc.nextLine();
-        LabUser u = new LabUser(username);
-
-        int n = Integer.parseInt(sc.nextLine());
-
-        for (int i = 0; i < n; i++) {
-            String command = sc.nextLine();
-
-            if ("SET_POLICY".equals(command)) {
-                int max = Integer.parseInt(sc.nextLine());
-                LabUser.setPolicy(max);
-            } else if ("LOGIN".equals(command)) {
-                String password = sc.nextLine();
-                u.login(password);
-            }
+    public void login(String pass) {
+        if(locked) {
+            System.out.println("Account is locked.");
+            return;
         }
 
-        sc.close();
+        if(pass.equals("pass123")) {
+            failedLogin = 0;
+            System.out.println("Login successful.");
+        } else {
+            failedLogin++;
+            int remain = maxTry - failedLogin;
+            if(remain <= 0) {
+                locked = true;
+                System.out.println("Login failed. Account locked.");
+            } else {
+                System.out.println("Login failed. " + remain + " attempts left.");
+            }
+        }
+    }
+}
+
+public class Lab3_1_5 {
+    public static void main(String[] args) {
+        Scanner khor_nai = new Scanner(System.in); // เปลี่ยนชื่อสื่อความหมาย
+        String nameInput = khor_nai.nextLine().trim();
+        Puchai u1 = new Puchai(nameInput);
+
+        int n = Integer.parseInt(khor_nai.nextLine().trim());
+        for(int i = 0; i < n; i++) {
+            String cmd = khor_nai.nextLine().trim();
+            if(cmd.equals("SET_POLICY")) {
+                int newMax = Integer.parseInt(khor_nai.nextLine().trim());
+                Puchai.setPolicy(newMax);
+            } else if(cmd.equals("LOGIN")) {
+                String pw = khor_nai.nextLine().trim();
+                u1.login(pw);
+            } else {
+                System.out.println("Unknown command: " + cmd);
+            }
+        }
+        khor_nai.close();
     }
 }
