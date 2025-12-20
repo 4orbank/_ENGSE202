@@ -1,3 +1,4 @@
+package Lab4;
 import java.util.Scanner;
 
 class Movie {
@@ -36,7 +37,7 @@ class Movie {
     }
 }
 
-public class Main {
+public class Lab4_8 {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);

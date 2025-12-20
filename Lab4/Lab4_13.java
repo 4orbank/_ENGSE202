@@ -1,0 +1,82 @@
+package Lab4;
+import java.util.Scanner;
+
+class Subscription {
+
+    private final String planName;
+    private final int durationDays;
+
+    private static int maxDuration = 365;
+
+    public Subscription(String planName, int durationDays) {
+        this.planName = planName;
+
+        if (durationDays > maxDuration) {
+            this.durationDays = maxDuration;
+        } else if (durationDays < 0) {
+            this.durationDays = 0;
+        } else {
+            this.durationDays = durationDays;
+        }
+    }
+
+    public Subscription(Subscription other) {
+        this.planName = other.planName;
+        this.durationDays = other.durationDays;
+    }
+
+    public static void setMaxDuration(int max) {
+        if (max > 0) {
+            maxDuration = max;
+            System.out.println("Max duration set to " + max);
+        } else {
+            System.out.println("Invalid max policy.");
+        }
+    }
+
+    public Subscription extend(int days) {
+
+        if (days <= 0) {
+            System.out.println("Invalid extension days.");
+            return this;
+        }
+
+        int newDays = this.durationDays + days;
+
+        if (newDays > maxDuration) {
+            System.out.println("Extension failed: Exceeds max policy.");
+            return this;
+        }
+
+        System.out.println("Extension successful.");
+        return new Subscription(this.planName, newDays);
+    }
+
+    public void displayInfo() {
+        System.out.println("Plan: " + planName + ", Days: " + durationDays);
+    }
+}
+
+public class Lab4_13 {
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        int policyMax = Integer.parseInt(input.nextLine());
+        Subscription.setMaxDuration(policyMax);
+
+        String planName = input.nextLine();
+        int initialDays = Integer.parseInt(input.nextLine());
+
+        Subscription currentSubscription =
+                new Subscription(planName, initialDays);
+
+        int extendDays1 = Integer.parseInt(input.nextLine());
+        currentSubscription = currentSubscription.extend(extendDays1);
+
+        int extendDays2 = Integer.parseInt(input.nextLine());
+        currentSubscription = currentSubscription.extend(extendDays2);
+
+        currentSubscription.displayInfo();
+    }
+}
